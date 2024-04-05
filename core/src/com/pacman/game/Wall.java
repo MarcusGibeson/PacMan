@@ -17,7 +17,7 @@ public class Wall {
     }
 
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.rect(x, y, width, height);
     }
 }

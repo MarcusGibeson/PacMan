@@ -27,7 +27,7 @@ public class Pacman extends ApplicationAdapter {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		shape = new ShapeRenderer();
-		ball = new Ball(150, 200,15);
+		ball = new Ball(150, 200,12);
 		coins = new ArrayList<>();
 		walls = new ArrayList<>();
 		generateRandomCoins(10);
