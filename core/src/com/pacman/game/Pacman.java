@@ -3,6 +3,9 @@ package com.pacman.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -12,7 +15,8 @@ import java.util.Random;
 
 
 public class Pacman extends ApplicationAdapter {
-
+	SpriteBatch batch;
+	Texture backgroundTexture;
 	Stage stage;
 	ShapeRenderer shape;
 	Ball ball;
@@ -20,10 +24,15 @@ public class Pacman extends ApplicationAdapter {
 	ArrayList<Wall> walls;
 //	Ghost ghost;
 
-
+	//variables for grid
+	int numRows = 100;
+	int numCols = 100;
 
 	@Override
 	public void create () {
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture("pacmanlvl1.png");
+
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		shape = new ShapeRenderer();
@@ -44,6 +53,11 @@ public class Pacman extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0,0,0,0);
 		ScreenUtils.clear(0,0,0,0);
 
+		batch.begin();
+
+		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		batch.end();
 		stage.draw();
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -72,6 +86,7 @@ public class Pacman extends ApplicationAdapter {
 		if (allCoinsCollected()) {
 			generateRandomCoins(10);
 		}
+
 	}
 
 	private void generateRandomCoins(int numCoins) {
