@@ -6,6 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -17,12 +19,16 @@ import java.util.Random;
 public class Pacman extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture backgroundTexture;
+
+	TextureAtlas atlas;
+	ArrayList<TextureRegion> frames;
 	Stage stage;
 	ShapeRenderer shape;
 	Ball ball;
 	ArrayList<Coin> coins;
 	ArrayList<Wall> walls;
-//	Ghost ghost;
+	ArrayList<Ghost> ghosts;
+	Ghost ghost;
 
 	//variables for grid
 	int numRows = 100;
@@ -32,11 +38,13 @@ public class Pacman extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture("pacmanlvl1.png");
+		atlas = new TextureAtlas("ghost.png");
+
 
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		shape = new ShapeRenderer();
-		ball = new Ball(150, 200,12);
+		ball = new Ball(310, 205,10);
 		coins = new ArrayList<>();
 		walls = new ArrayList<>();
 		generateRandomCoins(10);
@@ -46,6 +54,10 @@ public class Pacman extends ApplicationAdapter {
 		for(int[] position : wallPositions) {
 			walls.add(new Wall(position[0], position[1], position[2], position[3]));
 		}
+
+		//ghost
+		Ghost ghost = new Ghost(250,250);
+		ghosts.add(ghost);
 	}
 
 	@Override
@@ -53,11 +65,13 @@ public class Pacman extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0,0,0,0);
 		ScreenUtils.clear(0,0,0,0);
 
-		batch.begin();
+//		batch.begin();
+//
+//		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//
+//		batch.end();
 
-		batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-		batch.end();
 		stage.draw();
 		shape.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -79,6 +93,12 @@ public class Pacman extends ApplicationAdapter {
 		}
 
 
+		//draw ghosts
+		batch.begin();
+		for (Ghost ghost : ghosts) {
+			ghost.render(batch);
+		}
+		batch.end();
 		//check collisions
 		ball.checkCollision(coins);
 
