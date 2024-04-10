@@ -2,8 +2,6 @@ package com.pacman.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -19,26 +17,15 @@ import java.util.Random;
 public class Pacman extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture backgroundTexture;
-
-	TextureAtlas atlas;
-	ArrayList<TextureRegion> frames;
 	Stage stage;
 	ShapeRenderer shape;
 	Ball ball;
 	ArrayList<Coin> coins;
 	ArrayList<Wall> walls;
 	ArrayList<Ghost> ghosts;
-	Ghost ghost;
-
-	//variables for grid
-	int numRows = 100;
-	int numCols = 100;
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		backgroundTexture = new Texture("pacmanlvl1.png");
-
 
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);

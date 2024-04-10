@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.Input.Keys;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.WeakHashMap;
 
 public class Ball {
     float x;
