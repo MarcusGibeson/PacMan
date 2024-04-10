@@ -99,12 +99,14 @@ public class Ball {
                 if (xSpeed > 0) {
                     x = wall.x - size;
                 } else if (xSpeed < 0) {
-                    x = wall.x + wall.width;
+                    x = wall.x + wall.width + size;
+                    xSpeed = 0;
                 }
                 if (ySpeed > 0) {
                     y = wall.y - size;
                 } else if (ySpeed < 0) {
-                    y = wall.y + wall.height;
+                    y = wall.y + wall.height + size;
+                    ySpeed=0;
                 }
                 return; // Exit the method
             }

@@ -14,7 +14,7 @@ public class Coin {
     public Coin(float x, float y, float size) {
         this.x = x;
         this.y = y;
-        this.size = size;
+        this.size = 3;
         this.isCollected = false;
     }
 
@@ -23,12 +23,7 @@ public class Coin {
             shape.begin(ShapeRenderer.ShapeType.Filled);
             shape.setColor(color);
 
-            // Draw the top triangle
-            shape.triangle(x, y + size, x + size, y, x - size, y);
-
-            // Draw the bottom triangle
-            shape.triangle(x, y - size, x + size, y, x - size, y);
-
+            shape.circle(x,y,size);
             shape.end();
         }
     }

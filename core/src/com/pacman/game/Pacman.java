@@ -2,10 +2,13 @@ package com.pacman.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,20 +23,26 @@ public class Pacman extends ApplicationAdapter {
 	ArrayList<Wall> walls;
 	ArrayList<Ghost> ghosts;
 
+	Texture backgroundTexture;
+
 	@Override
 	public void create () {
+		batch = new SpriteBatch();
+		backgroundTexture = new Texture("pacmanlvl1.png");
 
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		shape = new ShapeRenderer();
-		ball = new Ball(310, 205,10);
+		ball = new Ball(320, 120,30);
 		coins = new ArrayList<>();
 		walls = new ArrayList<>();
 		ghosts = new ArrayList<>();
 
-		//generate random coins inside play area
-
-		generateRandomCoins(15);
+		//add coins
+		int[][] coinPositions = PacmanLevel1Maze.getCoinPositions();
+		for(int[] position : coinPositions) {
+			coins.add(new Coin(position[0], position[1], 3));
+		}
 
 		//add maze walls
 		int[][] wallPositions = PacmanLevel1Maze.getWallPositions();
@@ -99,51 +108,11 @@ public class Pacman extends ApplicationAdapter {
 
 		//check if all coins are collected
 		if (allCoinsCollected()) {
-			generateRandomCoins(10);
+			//end game
 		}
 
 	}
 
-	private void generateRandomCoins(int numCoins) {
-		Random random = new Random();
-		int coinSize = 10;
-
-		for (int i=0; i < numCoins; i++) {
-			float randomX;
-			float randomY;
-
-			//Generate random patterns within specific area
-			do {
-				randomX = random.nextInt(630-coinSize * 2) + coinSize;
-				randomY = random.nextInt(438-coinSize * 2) + coinSize;
-			} while (collidesWithWall(randomX, randomY) || !isInsidePlayArea(randomX, randomY));
-
-			Coin coin = new Coin(randomX, randomY, coinSize);
-			coins.add(coin);
-		}
-	}
-
-
-	private boolean collidesWithWall(float x, float y) {
-		for (Wall wall : walls) {
-			if (x >= wall.x && x <= wall.x + wall.width &&
-					y >= wall.y && y <= wall.y + wall.height) {
-				return true; // Collision detected
-			}
-		}
-		return false; // No collision detected
-	}
-
-
-	private boolean isInsidePlayArea(float x, float y) {
-		//Define the boundaries of the play area
-		float minX = 0;
-		float maxX = 630;
-		float minY = 25;
-		float maxY = 438;
-
-		return x >= minX && x<= maxX && y>= minY && y <= maxY;
-	}
 	private boolean allCoinsCollected() {
 		for (Coin coin : coins) {
 			if (!coin.isCollected()) {

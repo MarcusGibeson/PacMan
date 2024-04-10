@@ -79,13 +79,37 @@ public class Ghost {
     }
 
     private void changeDirection() {
+        int speed = xSpeed + ySpeed;
+
         if (xSpeed != 0) {
-            xSpeed = -xSpeed;
-        }
-        else {
-            ySpeed = -ySpeed;
+            //if moving horizontally, switch to vertical
+            if (xSpeed > 0) {
+                //moving right, so switching to moving down
+                xSpeed = 0;
+                ySpeed = -speed;
+            } else {
+                //moving left, so switching to moving up
+                xSpeed = 0;
+                ySpeed = speed;
+            }
+        } else {
+            //if moving vertically, switch to horizontal
+            if (ySpeed > 0) {
+                //moving up, switch to right
+                xSpeed = speed;
+                ySpeed = 0;
+            } else {
+                //moving down, switch to left
+                xSpeed = -speed;
+                ySpeed = 0;
+            }
         }
 
+
+        updateSpriteDirection();
+    }
+
+    private void updateSpriteDirection() {
         //change sprite based on direction
         if (xSpeed > 0) {
             ghostSprite.setTexture(ghostRightTexture);
