@@ -2,10 +2,7 @@ package com.pacman.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -16,7 +13,6 @@ import java.util.Random;
 
 public class Pacman extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture backgroundTexture;
 	Stage stage;
 	ShapeRenderer shape;
 	Ball ball;

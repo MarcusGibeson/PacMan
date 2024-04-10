@@ -14,7 +14,6 @@ public class Ghost {
     int size;
     int xSpeed;
     int ySpeed;
-    int speed;
 
     ArrayList<Wall> walls;
     Texture ghostTexture;
