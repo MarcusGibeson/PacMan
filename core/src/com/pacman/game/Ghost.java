@@ -6,22 +6,42 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+
 public class Ghost {
     float x;
     float y;
     int size;
     int xSpeed;
     int ySpeed;
+    int speed;
+
+    ArrayList<Wall> walls;
+    Texture ghostTexture;
+    Texture ghostUpTexture;
+    Texture ghostDownTexture;
+    Texture ghostLeftTexture;
+    Texture ghostRightTexture;
 
     Sprite ghostSprite;
 
-    public Ghost(float initialX, float initialY) {
-        Texture ghostTexture = new Texture(Gdx.files.internal("RedGhostLookCenter.png"));
+    public Ghost(float initialX, float initialY, int xSpeed, int ySpeed, String spritePath, String upSpritePath, String downSpritePath, String leftSpritePath, String rightSpritePath, ArrayList<Wall> walls) {
+        ghostTexture = new Texture(Gdx.files.internal(spritePath));
+        ghostUpTexture = new Texture(Gdx.files.internal(upSpritePath));
+        ghostDownTexture = new Texture(Gdx.files.internal(downSpritePath));
+        ghostLeftTexture = new Texture(Gdx.files.internal(leftSpritePath));
+        ghostRightTexture = new Texture(Gdx.files.internal(rightSpritePath));
+
 
         ghostSprite = new Sprite(ghostTexture);
 
         this.x = initialX;
         this.y = initialY;
+        this.walls = walls;
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
+
+        this.size = (int) Math.max(ghostSprite.getWidth(), ghostSprite.getHeight());
 
         ghostSprite.setPosition(x, y);
     }
@@ -30,9 +50,52 @@ public class Ghost {
         ghostSprite.draw(batch);
     }
 
+
     public void update(float deltaTime) {
-        //movement logic
+        float newX = x + xSpeed * deltaTime;
+        float newY = y + ySpeed * deltaTime;
+
+        // Update the ghost's position only if it's not colliding with a wall
+        if (!collidesWithWall(newX, newY)) {
+            x = newX;
+            y = newY;
+            ghostSprite.setPosition(newX, newY);
+        }
+        else {
+            changeDirection();
+        }
+
     }
 
+    private boolean collidesWithWall(float newX, float newY) {
+        for (Wall wall : walls) {
+            if (newX < wall.x + wall.width &&
+                    newX + size > wall.x &&
+                    newY < wall.y + wall.height &&
+                    newY + size > wall.y) {
+                return true; // Collision detected
+            }
+        }
+        return false; // No collision detected
+    }
 
+    private void changeDirection() {
+        if (xSpeed != 0) {
+            xSpeed = -xSpeed;
+        }
+        else {
+            ySpeed = -ySpeed;
+        }
+
+        //change sprite based on direction
+        if (xSpeed > 0) {
+            ghostSprite.setTexture(ghostRightTexture);
+        } else if (xSpeed < 0) {
+            ghostSprite.setTexture(ghostLeftTexture);
+        } else if (ySpeed > 0) {
+            ghostSprite.setTexture(ghostUpTexture);
+        } else if (ySpeed < 0) {
+            ghostSprite.setTexture(ghostDownTexture);
+        }
+    }
 }

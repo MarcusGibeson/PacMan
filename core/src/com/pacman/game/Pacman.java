@@ -38,7 +38,6 @@ public class Pacman extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		backgroundTexture = new Texture("pacmanlvl1.png");
-		atlas = new TextureAtlas("ghost.png");
 
 
 		stage = new Stage();
@@ -47,7 +46,11 @@ public class Pacman extends ApplicationAdapter {
 		ball = new Ball(310, 205,10);
 		coins = new ArrayList<>();
 		walls = new ArrayList<>();
-		generateRandomCoins(10);
+		ghosts = new ArrayList<>();
+
+		//generate random coins inside play area
+
+		generateRandomCoins(15);
 
 		//add maze walls
 		int[][] wallPositions = PacmanLevel1Maze.getWallPositions();
@@ -56,8 +59,12 @@ public class Pacman extends ApplicationAdapter {
 		}
 
 		//ghost
-		Ghost ghost = new Ghost(250,250);
-		ghosts.add(ghost);
+		Ghost redGhost = new Ghost(260,230, 30, 0,"data/red/redGhostCenter.png", "data/red/redGhostUp.png", "data/red/redGhostDown.png", "data/red/redGhostLeft.png","data/red/redGhostRight.png", walls);
+		ghosts.add(redGhost);
+		Ghost greenGhost = new Ghost(300, 230, 0, -30, "data/green/greenGhostCenter.png", "data/green/greenGhostUp.png", "data/green/greenGhostDown.png", "data/green/greenGhostLeft.png", "data/green/greenGhostRight.png", walls);
+		ghosts.add(greenGhost);
+		Ghost yellowGhost = new Ghost (340, 230, -30, 0, "data/yellow/yellowGhostCenter.png", "data/yellow/yellowGhostUp.png","data/yellow/yellowGhostDown.png","data/yellow/yellowGhostLeft.png","data/yellow/yellowGhostRight.png",walls);
+		ghosts.add(yellowGhost);
 	}
 
 	@Override
@@ -99,6 +106,11 @@ public class Pacman extends ApplicationAdapter {
 			ghost.render(batch);
 		}
 		batch.end();
+
+		for (Ghost ghost : ghosts) {
+			ghost.update(Gdx.graphics.getDeltaTime());
+		}
+
 		//check collisions
 		ball.checkCollision(coins);
 
@@ -111,20 +123,44 @@ public class Pacman extends ApplicationAdapter {
 
 	private void generateRandomCoins(int numCoins) {
 		Random random = new Random();
-		int screenWidth = Gdx.graphics.getWidth();
-		int screenHeight = Gdx.graphics.getHeight();
-		float coinSize = 10;
+		int coinSize = 10;
 
-		for (int i =0; i < numCoins; i++) {
-			float randomX = random.nextFloat() * (screenWidth - coinSize * 2) + coinSize;
-			float randomY = random.nextFloat() * (screenHeight - coinSize * 2) + coinSize;
+		for (int i=0; i < numCoins; i++) {
+			float randomX;
+			float randomY;
+
+			//Generate random patterns within specific area
+			do {
+				randomX = random.nextInt(630-coinSize * 2) + coinSize;
+				randomY = random.nextInt(438-coinSize * 2) + coinSize;
+			} while (collidesWithWall(randomX, randomY) || !isInsidePlayArea(randomX, randomY));
 
 			Coin coin = new Coin(randomX, randomY, coinSize);
-
 			coins.add(coin);
 		}
 	}
 
+
+	private boolean collidesWithWall(float x, float y) {
+		for (Wall wall : walls) {
+			if (x >= wall.x && x <= wall.x + wall.width &&
+					y >= wall.y && y <= wall.y + wall.height) {
+				return true; // Collision detected
+			}
+		}
+		return false; // No collision detected
+	}
+
+
+	private boolean isInsidePlayArea(float x, float y) {
+		//Define the boundaries of the play area
+		float minX = 0;
+		float maxX = 630;
+		float minY = 25;
+		float maxY = 438;
+
+		return x >= minX && x<= maxX && y>= minY && y <= maxY;
+	}
 	private boolean allCoinsCollected() {
 		for (Coin coin : coins) {
 			if (!coin.isCollected()) {

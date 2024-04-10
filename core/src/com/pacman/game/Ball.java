@@ -44,7 +44,15 @@ public class Ball {
             xSpeed = 0;
             ySpeed = speed;
         }
+        if(Gdx.input.isKeyPressed(Keys.DPAD_UP)) {
+            xSpeed = 0;
+            ySpeed = speed;
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+            xSpeed = -speed;
+            ySpeed = 0;
+        }
+        if(Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) {
             xSpeed = -speed;
             ySpeed = 0;
         }
@@ -52,11 +60,24 @@ public class Ball {
             xSpeed = 0;
             ySpeed = -speed;
         }
+        if(Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) {
+            xSpeed = 0;
+            ySpeed = -speed;
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             xSpeed = speed;
             ySpeed = 0;
         }
+        if(Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) {
+            xSpeed = speed;
+            ySpeed = 0;
+        }
 
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+            size = 25;
+        } else {
+            size = 10;
+        }
         // Move the ball based on current speed
         x += Gdx.graphics.getDeltaTime() * xSpeed;
         y += Gdx.graphics.getDeltaTime() * ySpeed;
