@@ -25,6 +25,13 @@ public class Ball {
         this.size = size;
     }
 
+    public float getX(){
+        return x;
+    }
+    public float getY() {
+        return y;
+    }
+
     public void update() {
         if (x < 0) {
             x = Gdx.graphics.getWidth();
